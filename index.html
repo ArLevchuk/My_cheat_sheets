@@ -1,0 +1,187 @@
+
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<title>Python Cheatsheets Viewer</title>
+<style>
+body {
+    font-family: Arial, sans-serif;
+    background: #ffffff;
+    color: #e2e8f0;
+    margin: 0;
+}
+.container {
+    display: flex;
+    height: 100vh;
+}
+.sidebar {
+    width: 320px;
+    background: #111702;
+    padding: 15px;
+    overflow-y: auto;
+}
+.viewer {
+    flex: 1;
+}
+.card {
+    background: #3066bd;
+    padding: 20px;
+    margin: 8px 0;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 12px;
+    line-height: 1.2;
+}
+.card:hover {
+    background: #334155;
+}
+.active {
+    background: #475569 !important;
+}
+iframe {
+    width: 100%;
+    height: 100%;
+    border: none;
+}
+input {
+    width: 95%;
+    padding: 8px;
+    margin-bottom: 10px;
+    border-radius: 5px;
+    border: none;
+}
+#sort-btn {
+    width: 100%;
+    margin-bottom: 10px;
+    padding: 8px;
+    border: none;
+    border-radius: 8px;
+    background: #3b82f6;
+    color: white;
+    cursor: pointer;
+}
+
+#sort-btn:hover {
+    background: #2563eb;
+}
+</style>
+</head>
+<body>
+
+<div class="container">
+<div class="sidebar">
+<h1>📚 Шпаргалки</h1>
+<input type="text" placeholder="Поиск..." onkeyup="searchFunc(this.value)">
+<button id="sort-btn">Сортировка: А→Я</button>
+
+<div class="card" onclick="loadPDF(this)" data-link="https://code.s3.yandex.net/Python-dev/cheatsheets/073-python-funktsii-shpora/073-python-funktsii-shpora.html">Функции</div>
+<div class="card" onclick="loadPDF(this)" data-link="https://code.s3.yandex.net/Python-dev/cheatsheets/072-python-print-peremennye-i-konstanty-shpora/072-python-print-peremennye-i-konstanty-shpora.html">Print(), переменные и константы</div>
+<div class="card" onclick="loadPDF(this)" data-link="https://code.s3.yandex.net/Python-dev/cheatsheets/074-python-moduli-shpora/074-python-moduli-shpora.html">Модули</div>
+<div class="card" onclick="loadPDF(this)" data-link="https://code.s3.yandex.net/Python-dev/cheatsheets/075-python-prostye-tipy-dannyh-shpora/075-python-prostye-tipy-dannyh-shpora.html">Простые типы данных</div>
+<div class="card" onclick="loadPDF(this)" data-link="https://code.s3.yandex.net/Python-dev/cheatsheets/076-python-vetvlenija-shpora/076-python-vetvlenija-shpora.html">Ветвления</div>
+<div class="card" onclick="loadPDF(this)" data-link="https://code.s3.yandex.net/Python-dev/cheatsheets/077-python-importiruemye-tipy-dannyh-shpora/077-python-importiruemye-tipy-dannyh-shpora.html">Импортируемые типы данных</div>
+<div class="card" onclick="loadPDF(this)" data-link="https://code.s3.yandex.net/Python-dev/cheatsheets/078-python-spiski-shpora/078-python-spiski-shpora.html">Списки</div>
+<div class="card" onclick="loadPDF(this)" data-link="https://code.s3.yandex.net/Python-dev/cheatsheets/079-python-kortezhi-shpora/079-python-kortezhi-shpora.html">Кортежи</div>
+<div class="card" onclick="loadPDF(this)" data-link="https://code.s3.yandex.net/Python-dev/cheatsheets/080-python-stroki-shpora/080-python-stroki-shpora.html">Строки</div>
+<div class="card" onclick="loadPDF(this)" data-link="https://code.s3.yandex.net/Python-dev/cheatsheets/081-python-operatsii-s-posledovatelnostjami-srezy-dia/081-python-operatsii-s-posledovatelnostjami-srezy-dia.html">Операции с последовательностями, срезы, диапазоны</div>
+<div class="card" onclick="loadPDF(this)" data-link="https://code.s3.yandex.net/Python-dev/cheatsheets/082-python-slovari-shpora/082-python-slovari-shpora.html">Словари</div>
+<div class="card" onclick="loadPDF(this)" data-link="https://code.s3.yandex.net/Python-dev/cheatsheets/083-python-mnozhestva-shpora/083-python-mnozhestva-shpora.html">Множества</div>
+<div class="card" onclick="loadPDF(this)" data-link="https://code.s3.yandex.net/Python-dev/cheatsheets/083-python-mnozhestva-shpora/083-python-mnozhestva-shpora.html">Изменяемые и неизменяемые типы данных</div>
+<div class="card" onclick="loadPDF(this)" data-link="https://code.s3.yandex.net/Python-dev/cheatsheets/084-python-tsikly-shpora/084-python-tsikly-shpora.html">Циклы</div>
+<div class="card" onclick="loadPDF(this)" data-link="https://code.s3.yandex.net/Python-dev/cheatsheets/085-nastroika-rabochego-okruzhenija-shpora/085-nastroika-rabochego-okruzhenija-shpora.html">Настройка рабочего окружения</div>
+<div class="card" onclick="loadPDF(this)" data-link="https://code.s3.yandex.net/backend-developer/learning-materials/Шпаргалка%20по%20коммитам.pdf">Шпаргалка по коммитам</div>
+<div class="card" onclick="loadPDF(this)" data-link="https://code.s3.yandex.net/Python-dev/cheatsheets/086-git-i-github-shpora/086-git-i-github-shpora.html">Git и GitHub</div>
+<div class="card" onclick="loadPDF(this)" data-link="https://code.s3.yandex.net/Python-dev/cheatsheets/087-trebovanija-k-kodu-shpora/087_trebovanija-k-kodu-shpora.html">Требования к коду</div>
+<div class="card" onclick="loadPDF(this)" data-link="https://code.s3.yandex.net/Python-dev/cheatsheets/Шпаргалка_по_git.html">Шпаргалка по Git</div>
+<div class="card" onclick="loadPDF(this)" data-link="https://code.s3.yandex.net/Python-dev/cheatsheets/Шпаргалка_по_терминалу_и_VSC.html">Шпаргалка по терминалу и VSCode</div>
+<div class="card" onclick="loadPDF(this)" data-link="https://code.s3.yandex.net/Python-dev/cheatsheets/088-oop-obekty-i-klassy-shpora/088-oop-obekty-i-klassy-shpora.html">ООП: объекты и классы</div>
+<div class="card" onclick="loadPDF(this)" data-link="https://code.s3.yandex.net/Python-dev/cheatsheets/089-oop-osnovnye-printsipy-shpora/089-oop-osnovnye-printsipy-shpora.html">ООП: основные принципы</div>
+<div class="card" onclick="loadPDF(this)" data-link="https://code.s3.yandex.net/Python-dev/cheatsheets/090-python-moduli-pakety-dokumentirovanie-koda-shpo/090-python-moduli-pakety-dokumentirovanie-koda-shpo.html">Модули, пакеты, документирование кода</div>
+<div class="card" onclick="loadPDF(this)" data-link="https://code.s3.yandex.net/Python-dev/cheatsheets/091-python-prostranstva-imen-iteratory-generatory-/091-python-prostranstva-imen-iteratory-generatory-.html">Пространства имён, итераторы, генераторы, lambda, декораторы</div>
+<div class="card" onclick="loadPDF(this)" data-link="https://code.s3.yandex.net/Python-dev/cheatsheets/052-algoritmy-slozhnost-struktury-dannyh-shpora/052-algoritmy-slozhnost-struktury-dannyh-shpora.html">Алгоритмы: сложность, структуры данных</div>
+<div class="card" onclick="loadPDF(this)" data-link="https://code.s3.yandex.net/Python-dev/cheatsheets/053-algoritmy-sortirovki-shpora/053-algoritmy-sortirovki-shpora.html">Алгоритмы: сортировки</div>
+
+
+</div>
+
+<div class="viewer">
+<iframe id="viewer" src=""></iframe>
+</div>
+</div>
+
+<script>
+const viewer = document.getElementById('viewer');
+const cards = document.querySelectorAll('.card');
+
+function loadPDF(el) {
+    const link = el.dataset.link;
+    viewer.src = link;
+
+    // сохраняем последнюю
+    localStorage.setItem('lastPDF', link);
+
+    // подсветка
+    cards.forEach(c => c.classList.remove('active'));
+    el.classList.add('active');
+}
+
+// загрузка последнего
+window.onload = () => {
+    const last = localStorage.getItem('lastPDF');
+    if (last) {
+        viewer.src = last;
+
+        cards.forEach(c => {
+            if (c.dataset.link === last) {
+                c.classList.add('active');
+            }
+        });
+        sortAsc = localStorage.getItem('sortAsc') === 'false' ? false : true;
+        sortBtn.innerText = sortAsc ? "Сортировка: от А до Я" : "Сортировка: от Я до А";
+        sortCards();
+    }
+
+    updateCounters();
+};
+
+// поиск
+function searchFunc(q) {
+    q = q.toLowerCase();
+    cards.forEach(c => {
+        c.style.display = c.innerText.toLowerCase().includes(q) ? "block" : "none";
+    });
+}
+let sortAsc = true;
+
+const sortBtn = document.getElementById('sort-btn');
+
+function sortCards() {
+    const container = document.querySelector('.sidebar');
+    const cards = Array.from(container.querySelectorAll('.card'));
+
+    cards.sort((a, b) => {
+        return sortAsc
+            ? a.innerText.localeCompare(b.innerText, 'ru')
+            : b.innerText.localeCompare(a.innerText, 'ru');
+    });
+
+    cards.forEach(card => container.appendChild(card));
+}
+
+sortBtn.onclick = () => {
+    sortAsc = !sortAsc;
+
+    sortBtn.innerText = sortAsc
+        ? "Сортировка: от А до Я"
+        : "Сортировка: от Я до А";
+
+    localStorage.setItem('sortAsc', sortAsc);
+
+    sortCards();
+};
+
+</script>
+
+</body>
+</html>
