@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="ru">
 <head>
@@ -38,6 +37,56 @@ body {
 }
 .active {
     background: #475569 !important;
+}
+.sidebar {
+    width: 320px;
+    background: #111702;
+    padding: 15px;
+    overflow-y: auto;
+
+    transition: transform 0.25s ease;
+}
+
+/* скрытое состояние */
+.container.sidebar-hidden .sidebar {
+    transform: translateX(-100%);
+}
+
+/* кнопка-ручка */
+.toggle-wrapper {
+    position: absolute;
+    left: 360px; /* прямо на границе sidebar */
+    top: 20px;
+    transition: left 0.25s ease;
+    z-index: 1000;
+}
+
+/* при скрытии меню кнопка уезжает влево */
+.container.sidebar-hidden .toggle-wrapper {
+    left: 0;
+}
+
+.toggle-btn {
+    width: 32px;
+    height: 60px;
+
+    border: none;
+    background: #111702;
+    color: white;
+
+    border-radius: 0 8px 8px 0;
+
+    cursor: pointer;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    box-shadow: 0 0 10px rgba(0,0,0,0.3);
+}
+
+.toggle-btn:hover {
+    background: #334155;
 }
 iframe {
     width: 100%;
@@ -104,7 +153,9 @@ input {
 
 
 </div>
-
+<div class="toggle-wrapper">
+<button id="toggle-sidebar">❮</button>
+</div>
 <div class="viewer">
 <iframe id="viewer" src=""></iframe>
 </div>
@@ -180,7 +231,17 @@ sortBtn.onclick = () => {
 
     sortCards();
 };
+const container = document.querySelector('.container');
+const btn = document.getElementById('toggle-sidebar');
 
+btn.onclick = () => {
+    container.classList.toggle('sidebar-hidden');
+
+    // меняем стрелку как в ChatGPT
+    btn.textContent = container.classList.contains('sidebar-hidden')
+        ? '❯'
+        : '❮';
+};
 </script>
 
 </body>
