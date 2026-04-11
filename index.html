@@ -3,55 +3,41 @@
 <head>
 <meta charset="UTF-8">
 <title>Python Cheatsheets Viewer</title>
+
 <style>
 body {
     font-family: Arial, sans-serif;
+    margin: 0;
     background: #ffffff;
     color: #e2e8f0;
-    margin: 0;
 }
+
 .container {
     display: flex;
     height: 100vh;
 }
+
+/* SIDEBAR */
 .sidebar {
     width: 320px;
     background: #111702;
     padding: 15px;
     overflow-y: auto;
-}
-.viewer {
-    flex: 1;
-}
-.card {
-    background: #3066bd;
-    padding: 20px;
-    margin: 8px 0;
-    border-radius: 5px;
-    cursor: pointer;
-    font-size: 12px;
-    line-height: 1.2;
-}
-.card:hover {
-    background: #334155;
-}
-.active {
-    background: #475569 !important;
-}
-.sidebar {
-    width: 320px;
-    transition: width 0.3s ease;
-    position: relative;
+    overflow-x: hidden;
+    transition: width 0.4s ease, padding 0.3s ease;
 }
 
-/* header */
+.sidebar.collapsed {
+    width: 45px;
+    padding: 10px 5px;
+}
+
 .sidebar-header {
     display: flex;
     justify-content: flex-end;
     margin-bottom: 10px;
 }
 
-/* кнопка */
 #toggle-btn {
     background: none;
     border: none;
@@ -60,35 +46,14 @@ body {
     cursor: pointer;
 }
 
-/* свернутое состояние */
-.sidebar.collapsed {
-    width: 25px;
-}
-
-.sidebar {
-    width: 320px;
-    background: #111702;
-    padding: 15px;
-    overflow: hidden;
-
-    transition: width 0.7s ease, padding 0.1s ease;
-}
+/* CONTENT HIDE WHEN COLLAPSED */
 .sidebar h1,
 .sidebar input,
 .sidebar #sort-btn,
 .sidebar .card {
     transition: opacity 0.2s ease, transform 0.2s ease;
 }
-.sidebar.collapsed {
-    width: 27px;
-    padding: 10px 5px;
-}
-.sidebar h1,
-.sidebar input,
-.sidebar #sort-btn,
-.sidebar .card {
-    transition: opacity 0.25s ease, transform 0.25s ease;
-}
+
 .sidebar.collapsed h1,
 .sidebar.collapsed input,
 .sidebar.collapsed #sort-btn,
@@ -97,39 +62,56 @@ body {
     transform: translateX(-10px);
     pointer-events: none;
 }
-/* центрирование контента */
+
+/* CARDS */
+.card {
+    background: #3066bd;
+    padding: 14px;
+    margin: 8px 0;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 12px;
+}
+
+.card:hover {
+    background: #334155;
+}
+
+.active {
+    background: #475569 !important;
+}
+
+.card.hidden {
+    display: none;
+}
+
+/* VIEWER */
 .viewer {
     flex: 1;
     display: flex;
     justify-content: center;
     align-items: center;
 }
-.card.hidden {
-    display: none;
-}
 
-/* iframe ограничим */
-iframe {
-    width: 90%;
-    height: 95%;
-    border-radius: 10px;
-}
 iframe {
     width: 100%;
     height: 100%;
     border: none;
 }
+
+/* INPUT + BUTTON */
 input {
     width: 95%;
     padding: 8px;
     margin-bottom: 10px;
-    border-radius: 5px;
+    border-radius: 6px;
     border: none;
 }
+
 #sort-btn {
     width: 100%;
-    margin-bottom: 10px;
     padding: 8px;
+    margin-bottom: 10px;
     border: none;
     border-radius: 8px;
     background: #3b82f6;
@@ -142,16 +124,20 @@ input {
 }
 </style>
 </head>
+
 <body>
 
 <div class="container">
-<div class="sidebar">
-<div class="sidebar-header">
-<button id="toggle-btn">☰</button>
-</div>
-<h1>📚 Шпаргалки</h1>
-<input type="text" placeholder="Поиск..." onkeyup="searchFunc(this.value)">
-<button id="sort-btn">Сортировка: А→Я</button>
+
+    <div class="sidebar">
+        <div class="sidebar-header">
+            <button id="toggle-btn">☰</button>
+        </div>
+
+        <h1>📚 Шпаргалки</h1>
+
+        <input type="text" placeholder="Поиск..." id="searchInput">
+        <button id="sort-btn">Сортировка: А→Я</button>
 
 <div class="card" onclick="loadPDF(this)" data-link="https://code.s3.yandex.net/Python-dev/cheatsheets/073-python-funktsii-shpora/073-python-funktsii-shpora.html">Функции</div>
 <div class="card" onclick="loadPDF(this)" data-link="https://code.s3.yandex.net/Python-dev/cheatsheets/072-python-print-peremennye-i-konstanty-shpora/072-python-print-peremennye-i-konstanty-shpora.html">Print(), переменные и константы</div>
@@ -183,109 +169,104 @@ input {
 
 </div>
 
-<div class="viewer">
-<iframe id="viewer" src=""></iframe>
-</div>
+    <div class="viewer">
+        <iframe id="viewer"></iframe>
+    </div>
+
 </div>
 
 <script>
 const viewer = document.getElementById('viewer');
+const sidebar = document.querySelector('.sidebar');
 const cards = document.querySelectorAll('.card');
+const sortBtn = document.getElementById('sort-btn');
+const searchInput = document.getElementById('searchInput');
+const toggleBtn = document.getElementById('toggle-btn');
 
-function loadPDF(el) {
-    const link = el.dataset.link;
-    viewer.src = link;
-
-    // сохраняем последнюю
-    localStorage.setItem('lastPDF', link);
-
-    // подсветка
-    cards.forEach(c => c.classList.remove('active'));
-    el.classList.add('active');
-}
-
-// загрузка последнего
-window.onload = () => {
-    const last = localStorage.getItem('lastPDF');
-    if (last) {
-        viewer.src = last;
-
-        cards.forEach(c => {
-            if (c.dataset.link === last) {
-                c.classList.add('active');
-            }
-        });
-        sortAsc = localStorage.getItem('sortAsc') === 'false' ? false : true;
-        sortBtn.innerText = sortAsc ? "Сортировка: от А до Я" : "Сортировка: от Я до А";
-        sortCards();
-    }
-
-    updateCounters();
-};
-
-// поиск
-function searchFunc(q) {
-    q = q.toLowerCase();
-
-    cards.forEach(c => {
-        const match = c.innerText.toLowerCase().includes(q);
-        c.classList.toggle('hidden', !match);
-    });
-}
 let sortAsc = true;
 
-const sortBtn = document.getElementById('sort-btn');
+/* LOAD CARD */
+function loadPDF(card) {
+    const link = card.dataset.link;
+    viewer.src = link;
 
+    localStorage.setItem('lastPDF', link);
+
+    cards.forEach(c => c.classList.remove('active'));
+    card.classList.add('active');
+}
+
+/* SEARCH */
+searchInput.addEventListener('input', (e) => {
+    const q = e.target.value.toLowerCase();
+
+    cards.forEach(c => {
+        c.classList.toggle(
+            'hidden',
+            !c.innerText.toLowerCase().includes(q)
+        );
+    });
+});
+
+/* SORT */
 function sortCards() {
     const container = document.querySelector('.sidebar');
-    const cards = Array.from(container.querySelectorAll('.card'));
+    const list = Array.from(document.querySelectorAll('.card'));
 
-    cards.sort((a, b) => {
+    list.sort((a, b) => {
         return sortAsc
             ? a.innerText.localeCompare(b.innerText, 'ru')
             : b.innerText.localeCompare(a.innerText, 'ru');
     });
 
-    cards.forEach(card => container.appendChild(card));
+    list.forEach(el => container.appendChild(el));
 }
 
 sortBtn.onclick = () => {
     sortAsc = !sortAsc;
 
     sortBtn.innerText = sortAsc
-        ? "Сортировка: от А до Я"
-        : "Сортировка: от Я до А";
+        ? "Сортировка: А→Я"
+        : "Сортировка: Я→А";
 
     localStorage.setItem('sortAsc', sortAsc);
-
     sortCards();
 };
-const toggleBtn = document.getElementById('toggle-btn');
-const sidebar = document.querySelector('.sidebar');
 
+/* SIDEBAR TOGGLE */
 toggleBtn.onclick = () => {
     sidebar.classList.toggle('collapsed');
-
-    const isCollapsed = sidebar.classList.contains('collapsed');
-
-    // если свернули — сбрасываем поиск
-    if (isCollapsed) {
-        const input = document.querySelector('input');
-        input.value = '';
-
-        searchFunc('');
-    }
-
-    // сохраняем состояние
-    localStorage.setItem('sidebarCollapsed', isCollapsed);
+    localStorage.setItem('sidebarCollapsed', sidebar.classList.contains('collapsed'));
 };
 
-// загрузка состояния
-window.addEventListener('load', () => {
-    const collapsed = localStorage.getItem('sidebarCollapsed') === 'true';
-    if (collapsed) {
+/* INIT */
+document.addEventListener('DOMContentLoaded', () => {
+    const last = localStorage.getItem('lastPDF');
+
+    if (last) {
+        viewer.src = last;
+
+        cards.forEach(c => {
+            if (c.dataset.link === last) c.classList.add('active');
+        });
+    }
+
+    sortAsc = localStorage.getItem('sortAsc') !== 'false';
+
+    if (!sortAsc) {
+        sortBtn.innerText = "Сортировка: Я→А";
+    }
+
+    sortCards();
+
+    if (localStorage.getItem('sidebarCollapsed') === 'true') {
         sidebar.classList.add('collapsed');
     }
+});
+
+/* CLICK DELEGATION */
+cards.forEach(card => {
+    card.addEventListener('click', () => loadPDF(card));
 });
 </script>
 
