@@ -22,7 +22,6 @@ body {
 }
 .viewer {
     flex: 1;
-    transition: all 0.3s ease;
 }
 .card {
     background: #3066bd;
@@ -42,57 +41,78 @@ body {
 .sidebar {
     width: 320px;
     transition: width 0.3s ease;
+    position: relative;
 }
 
-/* скрытое состояние */
-.container.sidebar-hidden .sidebar {
-    width: 0;
-    padding: 0;
-    overflow: hidden;
-}
-
-/* кнопка-ручка */
-.toggle-wrapper {
-    position: absolute;
-    left: 360px; /* прямо на границе sidebar */
-    top: 20px;
-    transition: left 0.25s ease;
-    z-index: 1000;
-}
-
-/* при скрытии меню кнопка уезжает влево */
-.container.sidebar-hidden .toggle-wrapper {
-    left: 0;
-}
-
-.toggle-btn {
-    width: 32px;
-    height: 60px;
-
-    border: none;
-    background: #111702;
-    color: white;
-
-    border-radius: 0 8px 8px 0;
-
-    cursor: pointer;
-
+/* header */
+.sidebar-header {
     display: flex;
-    align-items: center;
+    justify-content: flex-end;
+    margin-bottom: 10px;
+}
+
+/* кнопка */
+#toggle-btn {
+    background: none;
+    border: none;
+    color: white;
+    font-size: 20px;
+    cursor: pointer;
+}
+
+/* свернутое состояние */
+.sidebar.collapsed {
+    width: 25px;
+}
+
+.sidebar {
+    width: 320px;
+    background: #111702;
+    padding: 15px;
+    overflow: hidden;
+
+    transition: width 0.7s ease, padding 0.1s ease;
+}
+.sidebar h1,
+.sidebar input,
+.sidebar #sort-btn,
+.sidebar .card {
+    transition: opacity 0.2s ease, transform 0.2s ease;
+}
+.sidebar.collapsed {
+    width: 27px;
+    padding: 10px 5px;
+}
+.sidebar h1,
+.sidebar input,
+.sidebar #sort-btn,
+.sidebar .card {
+    transition: opacity 0.25s ease, transform 0.25s ease;
+}
+.sidebar.collapsed h1,
+.sidebar.collapsed input,
+.sidebar.collapsed #sort-btn,
+.sidebar.collapsed .card {
+    opacity: 0;
+    transform: translateX(-10px);
+    pointer-events: none;
+}
+/* центрирование контента */
+.viewer {
+    flex: 1;
+    display: flex;
     justify-content: center;
-
-    box-shadow: 0 0 10px rgba(0,0,0,0.3);
+    align-items: center;
+}
+.card.hidden {
+    display: none;
 }
 
-.toggle-btn:hover {
-    background: #334155;
-}
-@media (max-width: 768px) {
-    .toggle-btn {
-        width: 44px;
-        height: 80px;
-        font-size: 20px;
-    }
+/* iframe ограничим */
+iframe {
+    width: 90%;
+    height: 95%;
+    border-radius: 10px;
 }
 iframe {
     width: 100%;
@@ -126,6 +146,9 @@ input {
 
 <div class="container">
 <div class="sidebar">
+<div class="sidebar-header">
+<button id="toggle-btn">☰</button>
+</div>
 <h1>📚 Шпаргалки</h1>
 <input type="text" placeholder="Поиск..." onkeyup="searchFunc(this.value)">
 <button id="sort-btn">Сортировка: А→Я</button>
@@ -159,9 +182,7 @@ input {
 
 
 </div>
-<div class="toggle-wrapper">
-<button id="toggle-sidebar">❮</button>
-</div>
+
 <div class="viewer">
 <iframe id="viewer" src=""></iframe>
 </div>
@@ -205,8 +226,10 @@ window.onload = () => {
 // поиск
 function searchFunc(q) {
     q = q.toLowerCase();
+
     cards.forEach(c => {
-        c.style.display = c.innerText.toLowerCase().includes(q) ? "block" : "none";
+        const match = c.innerText.toLowerCase().includes(q);
+        c.classList.toggle('hidden', !match);
     });
 }
 let sortAsc = true;
@@ -237,17 +260,33 @@ sortBtn.onclick = () => {
 
     sortCards();
 };
-const container = document.querySelector('.container');
-const btn = document.getElementById('toggle-sidebar');
+const toggleBtn = document.getElementById('toggle-btn');
+const sidebar = document.querySelector('.sidebar');
 
-btn.onclick = () => {
-    container.classList.toggle('sidebar-hidden');
+toggleBtn.onclick = () => {
+    sidebar.classList.toggle('collapsed');
 
-    // меняем стрелку как в ChatGPT
-    btn.textContent = container.classList.contains('sidebar-hidden')
-        ? '❯'
-        : '❮';
+    const isCollapsed = sidebar.classList.contains('collapsed');
+
+    // если свернули — сбрасываем поиск
+    if (isCollapsed) {
+        const input = document.querySelector('input');
+        input.value = '';
+
+        searchFunc('');
+    }
+
+    // сохраняем состояние
+    localStorage.setItem('sidebarCollapsed', isCollapsed);
 };
+
+// загрузка состояния
+window.addEventListener('load', () => {
+    const collapsed = localStorage.getItem('sidebarCollapsed') === 'true';
+    if (collapsed) {
+        sidebar.classList.add('collapsed');
+    }
+});
 </script>
 
 </body>
