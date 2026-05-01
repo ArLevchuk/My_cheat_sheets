@@ -3,126 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <title>Python Cheatsheets Viewer</title>
-
-<style>
-body {
-    font-family: Arial, sans-serif;
-    margin: 0;
-    background: #ffffff;
-    color: #e2e8f0;
-}
-
-.container {
-    display: flex;
-    height: 100vh;
-}
-
-/* SIDEBAR */
-.sidebar {
-    width: 320px;
-    background: #111702;
-    padding: 15px;
-    overflow-y: auto;
-    overflow-x: hidden;
-    transition: width 0.4s ease, padding 0.3s ease;
-}
-
-.sidebar.collapsed {
-    width: 45px;
-    padding: 10px 5px;
-}
-
-.sidebar-header {
-    display: flex;
-    justify-content: flex-end;
-    margin-bottom: 10px;
-}
-
-#toggle-btn {
-    background: none;
-    border: none;
-    color: white;
-    font-size: 20px;
-    cursor: pointer;
-}
-
-/* CONTENT HIDE WHEN COLLAPSED */
-.sidebar h1,
-.sidebar input,
-.sidebar #sort-btn,
-.sidebar .card {
-    transition: opacity 0.2s ease, transform 0.2s ease;
-}
-
-.sidebar.collapsed h1,
-.sidebar.collapsed input,
-.sidebar.collapsed #sort-btn,
-.sidebar.collapsed .card {
-    opacity: 0;
-    transform: translateX(-10px);
-    pointer-events: none;
-}
-
-/* CARDS */
-.card {
-    background: #3066bd;
-    padding: 14px;
-    margin: 8px 0;
-    border-radius: 6px;
-    cursor: pointer;
-    font-size: 12px;
-}
-
-.card:hover {
-    background: #334155;
-}
-
-.active {
-    background: #475569 !important;
-}
-
-.card.hidden {
-    display: none;
-}
-
-/* VIEWER */
-.viewer {
-    flex: 1;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-}
-
-iframe {
-    width: 100%;
-    height: 100%;
-    border: none;
-}
-
-/* INPUT + BUTTON */
-input {
-    width: 95%;
-    padding: 8px;
-    margin-bottom: 10px;
-    border-radius: 6px;
-    border: none;
-}
-
-#sort-btn {
-    width: 100%;
-    padding: 8px;
-    margin-bottom: 10px;
-    border: none;
-    border-radius: 8px;
-    background: #3b82f6;
-    color: white;
-    cursor: pointer;
-}
-
-#sort-btn:hover {
-    background: #2563eb;
-}
-</style>
+<link rel="stylesheet" href="styles.css">
 </head>
 
 <body>
@@ -139,140 +20,53 @@ input {
         <input type="text" placeholder="Поиск..." id="searchInput">
         <button id="sort-btn">Сортировка: А→Я</button>
 
-<div class="card" onclick="loadPDF(this)" data-link="https://code.s3.yandex.net/Python-dev/cheatsheets/073-python-funktsii-shpora/073-python-funktsii-shpora.html">Функции</div>
-<div class="card" onclick="loadPDF(this)" data-link="https://code.s3.yandex.net/Python-dev/cheatsheets/072-python-print-peremennye-i-konstanty-shpora/072-python-print-peremennye-i-konstanty-shpora.html">Print(), переменные и константы</div>
-<div class="card" onclick="loadPDF(this)" data-link="https://code.s3.yandex.net/Python-dev/cheatsheets/074-python-moduli-shpora/074-python-moduli-shpora.html">Модули</div>
-<div class="card" onclick="loadPDF(this)" data-link="https://code.s3.yandex.net/Python-dev/cheatsheets/075-python-prostye-tipy-dannyh-shpora/075-python-prostye-tipy-dannyh-shpora.html">Простые типы данных</div>
-<div class="card" onclick="loadPDF(this)" data-link="https://code.s3.yandex.net/Python-dev/cheatsheets/076-python-vetvlenija-shpora/076-python-vetvlenija-shpora.html">Ветвления</div>
-<div class="card" onclick="loadPDF(this)" data-link="https://code.s3.yandex.net/Python-dev/cheatsheets/077-python-importiruemye-tipy-dannyh-shpora/077-python-importiruemye-tipy-dannyh-shpora.html">Импортируемые типы данных</div>
-<div class="card" onclick="loadPDF(this)" data-link="https://code.s3.yandex.net/Python-dev/cheatsheets/078-python-spiski-shpora/078-python-spiski-shpora.html">Списки</div>
-<div class="card" onclick="loadPDF(this)" data-link="https://code.s3.yandex.net/Python-dev/cheatsheets/079-python-kortezhi-shpora/079-python-kortezhi-shpora.html">Кортежи</div>
-<div class="card" onclick="loadPDF(this)" data-link="https://code.s3.yandex.net/Python-dev/cheatsheets/080-python-stroki-shpora/080-python-stroki-shpora.html">Строки</div>
-<div class="card" onclick="loadPDF(this)" data-link="https://code.s3.yandex.net/Python-dev/cheatsheets/081-python-operatsii-s-posledovatelnostjami-srezy-dia/081-python-operatsii-s-posledovatelnostjami-srezy-dia.html">Операции с последовательностями, срезы, диапазоны</div>
-<div class="card" onclick="loadPDF(this)" data-link="https://code.s3.yandex.net/Python-dev/cheatsheets/082-python-slovari-shpora/082-python-slovari-shpora.html">Словари</div>
-<div class="card" onclick="loadPDF(this)" data-link="https://code.s3.yandex.net/Python-dev/cheatsheets/083-python-mnozhestva-shpora/083-python-mnozhestva-shpora.html">Множества</div>
-<div class="card" onclick="loadPDF(this)" data-link="https://code.s3.yandex.net/Python-dev/cheatsheets/083-python-mnozhestva-shpora/083-python-mnozhestva-shpora.html">Изменяемые и неизменяемые типы данных</div>
-<div class="card" onclick="loadPDF(this)" data-link="https://code.s3.yandex.net/Python-dev/cheatsheets/084-python-tsikly-shpora/084-python-tsikly-shpora.html">Циклы</div>
-<div class="card" onclick="loadPDF(this)" data-link="https://code.s3.yandex.net/Python-dev/cheatsheets/085-nastroika-rabochego-okruzhenija-shpora/085-nastroika-rabochego-okruzhenija-shpora.html">Настройка рабочего окружения</div>
-<div class="card" onclick="loadPDF(this)" data-link="https://code.s3.yandex.net/backend-developer/learning-materials/Шпаргалка%20по%20коммитам.pdf">Шпаргалка по коммитам</div>
-<div class="card" onclick="loadPDF(this)" data-link="https://code.s3.yandex.net/Python-dev/cheatsheets/086-git-i-github-shpora/086-git-i-github-shpora.html">Git и GitHub</div>
-<div class="card" onclick="loadPDF(this)" data-link="https://code.s3.yandex.net/Python-dev/cheatsheets/087-trebovanija-k-kodu-shpora/087_trebovanija-k-kodu-shpora.html">Требования к коду</div>
-<div class="card" onclick="loadPDF(this)" data-link="https://code.s3.yandex.net/Python-dev/cheatsheets/Шпаргалка_по_git.html">Шпаргалка по Git</div>
-<div class="card" onclick="loadPDF(this)" data-link="https://code.s3.yandex.net/Python-dev/cheatsheets/Шпаргалка_по_терминалу_и_VSC.html">Шпаргалка по терминалу и VSCode</div>
-<div class="card" onclick="loadPDF(this)" data-link="https://code.s3.yandex.net/Python-dev/cheatsheets/088-oop-obekty-i-klassy-shpora/088-oop-obekty-i-klassy-shpora.html">ООП: объекты и классы</div>
-<div class="card" onclick="loadPDF(this)" data-link="https://code.s3.yandex.net/Python-dev/cheatsheets/089-oop-osnovnye-printsipy-shpora/089-oop-osnovnye-printsipy-shpora.html">ООП: основные принципы</div>
-<div class="card" onclick="loadPDF(this)" data-link="https://code.s3.yandex.net/Python-dev/cheatsheets/090-python-moduli-pakety-dokumentirovanie-koda-shpo/090-python-moduli-pakety-dokumentirovanie-koda-shpo.html">Модули, пакеты, документирование кода</div>
-<div class="card" onclick="loadPDF(this)" data-link="https://code.s3.yandex.net/Python-dev/cheatsheets/091-python-prostranstva-imen-iteratory-generatory-/091-python-prostranstva-imen-iteratory-generatory-.html">Пространства имён, итераторы, генераторы, lambda, декораторы</div>
-<div class="card" onclick="loadPDF(this)" data-link="https://code.s3.yandex.net/Python-dev/cheatsheets/052-algoritmy-slozhnost-struktury-dannyh-shpora/052-algoritmy-slozhnost-struktury-dannyh-shpora.html">Алгоритмы: сложность, структуры данных</div>
-<div class="card" onclick="loadPDF(this)" data-link="https://code.s3.yandex.net/Python-dev/cheatsheets/053-algoritmy-sortirovki-shpora/053-algoritmy-sortirovki-shpora.html">Алгоритмы: сортировки</div>
-<div class="card" onclick="loadPDF(this)" data-link="https://ArLevchuk.github.io/My_cheat_sheets/Библиотека%20requests.%20Сетевые%20запросы.pdf">Библиотека requests. Сетевые запросы</div>
-<div class="card" onclick="loadPDF(this)" data-link="https://ArLevchuk.github.io/My_cheat_sheets/Шпаргалка%20Анфиса%20в%20Django.pdf">Шпаргалка Анфиса в Django</div>
-<div class="card" onclick="loadPDF(this)" data-link="https://ArLevchuk.github.io/My_cheat_sheets/Шпаргалка%20Знакомство%20с%20Django.pdf">Шпаргалка Знакомство с Django</div>
-<div class="card" onclick="loadPDF(this)" data-link="https://ArLevchuk.github.io/My_cheat_sheets/Шпаргалка%20Первое%20приложение.pdf">Шпаргалка Первое приложение</div>
+<div class="cards">
+<div class="card" data-link="https://code.s3.yandex.net/Python-dev/cheatsheets/073-python-funktsii-shpora/073-python-funktsii-shpora.html">Функции</div>
+<div class="card" data-link="https://code.s3.yandex.net/Python-dev/cheatsheets/072-python-print-peremennye-i-konstanty-shpora/072-python-print-peremennye-i-konstanty-shpora.html">Print(), переменные и константы</div>
+<div class="card" data-link="https://code.s3.yandex.net/Python-dev/cheatsheets/074-python-moduli-shpora/074-python-moduli-shpora.html">Модули</div>
+<div class="card" data-link="https://code.s3.yandex.net/Python-dev/cheatsheets/075-python-prostye-tipy-dannyh-shpora/075-python-prostye-tipy-dannyh-shpora.html">Простые типы данных</div>
+<div class="card" data-link="https://code.s3.yandex.net/Python-dev/cheatsheets/076-python-vetvlenija-shpora/076-python-vetvlenija-shpora.html">Ветвления</div>
+<div class="card" data-link="https://code.s3.yandex.net/Python-dev/cheatsheets/077-python-importiruemye-tipy-dannyh-shpora/077-python-importiruemye-tipy-dannyh-shpora.html">Импортируемые типы данных</div>
+<div class="card" data-link="https://code.s3.yandex.net/Python-dev/cheatsheets/078-python-spiski-shpora/078-python-spiski-shpora.html">Списки</div>
+<div class="card" data-link="https://code.s3.yandex.net/Python-dev/cheatsheets/079-python-kortezhi-shpora/079-python-kortezhi-shpora.html">Кортежи</div>
+<div class="card" data-link="https://code.s3.yandex.net/Python-dev/cheatsheets/080-python-stroki-shpora/080-python-stroki-shpora.html">Строки</div>
+<div class="card" data-link="https://code.s3.yandex.net/Python-dev/cheatsheets/081-python-operatsii-s-posledovatelnostjami-srezy-dia/081-python-operatsii-s-posledovatelnostjami-srezy-dia.html">Операции с последовательностями, срезы, диапазоны</div>
+<div class="card" data-link="https://code.s3.yandex.net/Python-dev/cheatsheets/082-python-slovari-shpora/082-python-slovari-shpora.html">Словари</div>
+<div class="card" data-link="https://code.s3.yandex.net/Python-dev/cheatsheets/083-python-mnozhestva-shpora/083-python-mnozhestva-shpora.html">Множества</div>
+<div class="card" data-link="https://code.s3.yandex.net/Python-dev/cheatsheets/083-python-mnozhestva-shpora/083-python-mnozhestva-shpora.html">Изменяемые и неизменяемые типы данных</div>
+<div class="card" data-link="https://code.s3.yandex.net/Python-dev/cheatsheets/084-python-tsikly-shpora/084-python-tsikly-shpora.html">Циклы</div>
+<div class="card" data-link="https://code.s3.yandex.net/Python-dev/cheatsheets/085-nastroika-rabochego-okruzhenija-shpora/085-nastroika-rabochego-okruzhenija-shpora.html">Настройка рабочего окружения</div>
+<div class="card" data-link="https://code.s3.yandex.net/backend-developer/learning-materials/Шпаргалка%20по%20коммитам.pdf">Шпаргалка по коммитам</div>
+<div class="card" data-link="https://code.s3.yandex.net/Python-dev/cheatsheets/086-git-i-github-shpora/086-git-i-github-shpora.html">Git и GitHub</div>
+<div class="card" data-link="https://code.s3.yandex.net/Python-dev/cheatsheets/087-trebovanija-k-kodu-shpora/087_trebovanija-k-kodu-shpora.html">Требования к коду</div>
+<div class="card" data-link="https://code.s3.yandex.net/Python-dev/cheatsheets/Шпаргалка_по_git.html">Шпаргалка по Git</div>
+<div class="card" data-link="https://code.s3.yandex.net/Python-dev/cheatsheets/Шпаргалка_по_терминалу_и_VSC.html">Шпаргалка по терминалу и VSCode</div>
+<div class="card" data-link="https://code.s3.yandex.net/Python-dev/cheatsheets/088-oop-obekty-i-klassy-shpora/088-oop-obekty-i-klassy-shpora.html">ООП: объекты и классы</div>
+<div class="card" data-link="https://code.s3.yandex.net/Python-dev/cheatsheets/089-oop-osnovnye-printsipy-shpora/089-oop-osnovnye-printsipy-shpora.html">ООП: основные принципы</div>
+<div class="card" data-link="https://code.s3.yandex.net/Python-dev/cheatsheets/090-python-moduli-pakety-dokumentirovanie-koda-shpo/090-python-moduli-pakety-dokumentirovanie-koda-shpo.html">Модули, пакеты, документирование кода</div>
+<div class="card" data-link="https://code.s3.yandex.net/Python-dev/cheatsheets/091-python-prostranstva-imen-iteratory-generatory-/091-python-prostranstva-imen-iteratory-generatory-.html">Пространства имён, итераторы, генераторы, lambda, декораторы</div>
+<div class="card" data-link="https://code.s3.yandex.net/Python-dev/cheatsheets/052-algoritmy-slozhnost-struktury-dannyh-shpora/052-algoritmy-slozhnost-struktury-dannyh-shpora.html">Алгоритмы: сложность, структуры данных</div>
+<div class="card" data-link="https://code.s3.yandex.net/Python-dev/cheatsheets/053-algoritmy-sortirovki-shpora/053-algoritmy-sortirovki-shpora.html">Алгоритмы: сортировки</div>
+<div class="card" data-link="https://code.s3.yandex.net/Python-dev/cheatsheets/023-django-sozdanie-proekta-i-prilozhenii-shpora/023-django-sozdanie-proekta-i-prilozhenii-shpora.html">Django: создание проекта и приложений</div>
+<div class="card" data-link="https://code.s3.yandex.net/Python-dev/cheatsheets/024-django-puti-i-view-funktsii-shpora/024-django-puti-i-view-funktsii-shpora.html">Django: пути и view-функции</div>
+<div class="card" data-link="https://code.s3.yandex.net/Python-dev/cheatsheets/026-html-i-css-shpora/026-html-i-css-shpora.html">HTML и CSS</div>
+<div class="card" data-link="https://code.s3.yandex.net/Python-dev/cheatsheets/025-django-pravila-oformlenija-html-i-shablonov-shpora/025-django-pravila-oformlenija-html-i-shablonov-shpora.html">Django: правила оформления HTML и шаблонов</div>
+<div class="card" data-link="https://code.s3.yandex.net/Python-dev/cheatsheets/027-django-shablonizator-i-html-shablony-shpora/027-django-shablonizator-i-html-shablony-shpora.html">Django: шаблонизатор и HTML-шаблоны</div>
+<div class="card" data-link="https://ArLevchuk.github.io/My_cheat_sheets/Библиотека%20requests.%20Сетевые%20запросы.pdf">Библиотека requests. Сетевые запросы</div>
+<div class="card" data-link="https://ArLevchuk.github.io/My_cheat_sheets/Шпаргалка%20Анфиса%20в%20Django.pdf">Шпаргалка Анфиса в Django</div>
+<div class="card" data-link="https://ArLevchuk.github.io/My_cheat_sheets/Шпаргалка%20Знакомство%20с%20Django.pdf">Шпаргалка Знакомство с Django</div>
+<div class="card" data-link="https://ArLevchuk.github.io/My_cheat_sheets/Шпаргалка%20Первое%20приложение.pdf">Шпаргалка Первое приложение</div>
 
 
+</div>
 </div>
 
     <div class="viewer">
         <iframe id="viewer"></iframe>
     </div>
-
+    
 </div>
 
-<script>
-const viewer = document.getElementById('viewer');
-const sidebar = document.querySelector('.sidebar');
-const cards = document.querySelectorAll('.card');
-const sortBtn = document.getElementById('sort-btn');
-const searchInput = document.getElementById('searchInput');
-const toggleBtn = document.getElementById('toggle-btn');
-
-let sortAsc = true;
-
-/* LOAD CARD */
-function loadPDF(card) {
-    const link = card.dataset.link;
-    viewer.src = link;
-
-    localStorage.setItem('lastPDF', link);
-
-    cards.forEach(c => c.classList.remove('active'));
-    card.classList.add('active');
-}
-
-/* SEARCH */
-searchInput.addEventListener('input', (e) => {
-    const q = e.target.value.toLowerCase();
-
-    cards.forEach(c => {
-        c.classList.toggle(
-            'hidden',
-            !c.innerText.toLowerCase().includes(q)
-        );
-    });
-});
-
-/* SORT */
-function sortCards() {
-    const container = document.querySelector('.sidebar');
-    const list = Array.from(document.querySelectorAll('.card'));
-
-    list.sort((a, b) => {
-        return sortAsc
-            ? a.innerText.localeCompare(b.innerText, 'ru')
-            : b.innerText.localeCompare(a.innerText, 'ru');
-    });
-
-    list.forEach(el => container.appendChild(el));
-}
-
-sortBtn.onclick = () => {
-    sortAsc = !sortAsc;
-
-    sortBtn.innerText = sortAsc
-        ? "Сортировка: А→Я"
-        : "Сортировка: Я→А";
-
-    localStorage.setItem('sortAsc', sortAsc);
-    sortCards();
-};
-
-/* SIDEBAR TOGGLE */
-toggleBtn.onclick = () => {
-    sidebar.classList.toggle('collapsed');
-    localStorage.setItem('sidebarCollapsed', sidebar.classList.contains('collapsed'));
-};
-
-/* INIT */
-document.addEventListener('DOMContentLoaded', () => {
-    const last = localStorage.getItem('lastPDF');
-
-    if (last) {
-        viewer.src = last;
-
-        cards.forEach(c => {
-            if (c.dataset.link === last) c.classList.add('active');
-        });
-    }
-
-    sortAsc = localStorage.getItem('sortAsc') !== 'false';
-
-    if (!sortAsc) {
-        sortBtn.innerText = "Сортировка: Я→А";
-    }
-
-    sortCards();
-
-    if (localStorage.getItem('sidebarCollapsed') === 'true') {
-        sidebar.classList.add('collapsed');
-    }
-});
-
-/* CLICK DELEGATION */
-cards.forEach(card => {
-    card.addEventListener('click', () => loadPDF(card));
-});
-</script>
-
+<script src="app.js"></script>
 </body>
 </html>
