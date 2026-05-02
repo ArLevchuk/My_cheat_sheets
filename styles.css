@@ -1,77 +1,168 @@
+/* ChatGPT-inspired dark UI */
+:root {
+    --sidebar-bg: #171717;
+    --sidebar-border: rgba(255, 255, 255, 0.08);
+    --canvas-bg: #343541;
+    --surface: rgba(255, 255, 255, 0.05);
+    --surface-hover: rgba(255, 255, 255, 0.08);
+    --surface-active: rgba(255, 255, 255, 0.12);
+    --text: #ececec;
+    --text-muted: #8e8ea0;
+    --input-bg: #40414f;
+    --accent: #10a37f;
+    --accent-hover: #0d8f6e;
+    --radius: 10px;
+    --radius-sm: 8px;
+    --shadow-subtle: 0 0 0 1px rgba(255, 255, 255, 0.06);
+}
+
+*,
+*::before,
+*::after {
+    box-sizing: border-box;
+}
+
 body {
-    font-family: Arial, sans-serif;
     margin: 0;
-    background: #ffffff;
-    color: #e2e8f0;
+    font-family: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+    font-size: 14px;
+    line-height: 1.45;
+    background: var(--canvas-bg);
+    color: var(--text);
+    -webkit-font-smoothing: antialiased;
 }
 
 .container {
     display: flex;
     height: 100vh;
+    overflow: hidden;
 }
 
 /* SIDEBAR */
 .sidebar {
-    width: 320px;
-    background: #111702;
-    padding: 15px;
+    width: 280px;
+    min-width: 280px;
+    background: var(--sidebar-bg);
+    border-right: 1px solid var(--sidebar-border);
+    padding: 10px 12px 16px;
     overflow-y: auto;
     overflow-x: hidden;
-    transition: width 0.4s ease, padding 0.3s ease;
+    scrollbar-color: rgba(255, 255, 255, 0.2) transparent;
+    scrollbar-width: thin;
+    transition: width 0.25s ease, min-width 0.25s ease, padding 0.25s ease;
+}
+
+.sidebar::-webkit-scrollbar {
+    width: 8px;
+}
+
+.sidebar::-webkit-scrollbar-track {
+    background: transparent;
+}
+
+.sidebar::-webkit-scrollbar-thumb {
+    background: rgba(255, 255, 255, 0.18);
+    border-radius: 999px;
+}
+
+.sidebar::-webkit-scrollbar-thumb:hover {
+    background: rgba(255, 255, 255, 0.28);
 }
 
 .sidebar.collapsed {
-    width: 45px;
-    padding: 10px 5px;
+    width: 52px;
+    min-width: 52px;
+    padding: 10px 8px 16px;
 }
 
 .sidebar-header {
     display: flex;
     justify-content: flex-end;
-    margin-bottom: 10px;
+    align-items: center;
+    margin-bottom: 12px;
+    min-height: 36px;
 }
 
 #toggle-btn {
-    background: none;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 36px;
+    height: 36px;
+    padding: 0;
+    background: transparent;
     border: none;
-    color: white;
-    font-size: 20px;
+    border-radius: var(--radius-sm);
+    color: var(--text);
+    font-size: 18px;
+    line-height: 1;
     cursor: pointer;
+    transition: background 0.15s ease, color 0.15s ease;
+}
+
+#toggle-btn:hover {
+    background: var(--surface-hover);
+}
+
+#toggle-btn:focus-visible {
+    outline: 2px solid var(--accent);
+    outline-offset: 2px;
+}
+
+.sidebar h1 {
+    margin: 0 0 14px;
+    font-size: 15px;
+    font-weight: 600;
+    letter-spacing: -0.01em;
+    color: var(--text);
 }
 
 /* CONTENT HIDE WHEN COLLAPSED */
 .sidebar h1,
 .sidebar input,
 .sidebar #sort-btn,
-.sidebar .card {
+.sidebar .cards {
     transition: opacity 0.2s ease, transform 0.2s ease;
 }
 
 .sidebar.collapsed h1,
 .sidebar.collapsed input,
 .sidebar.collapsed #sort-btn,
-.sidebar.collapsed .card {
+.sidebar.collapsed .cards {
     opacity: 0;
-    transform: translateX(-10px);
+    transform: translateX(-8px);
     pointer-events: none;
+}
+
+.cards {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
 }
 
 /* CARDS */
 .card {
-    background: #3066bd;
-    padding: 14px;
-    margin: 8px 0;
-    border-radius: 6px;
+    margin: 0;
+    padding: 10px 12px;
+    border-radius: var(--radius-sm);
+    background: transparent;
+    border: none;
+    box-shadow: none;
     cursor: pointer;
-    font-size: 12px;
+    font-size: 13px;
+    line-height: 1.4;
+    color: var(--text);
+    text-align: left;
+    transition: background 0.15s ease;
 }
 
 .card:hover {
-    background: #334155;
+    background: var(--surface-hover);
 }
 
-.active {
-    background: #475569 !important;
+.card.active {
+    background: var(--surface-active) !important;
+    box-shadow: var(--shadow-subtle);
 }
 
 .card.hidden {
@@ -81,44 +172,74 @@ body {
 /* VIEWER */
 .viewer {
     flex: 1;
+    min-width: 0;
     display: flex;
-    justify-content: center;
-    align-items: center;
+    justify-content: stretch;
+    align-items: stretch;
+    background: var(--canvas-bg);
 }
 
 .highlight {
-    background: #facc15;
-    color: black;
-    border-radius: 3px;
-    padding: 1px 2px;
+    background: rgba(250, 204, 21, 0.35);
+    color: inherit;
+    border-radius: 4px;
+    padding: 0 2px;
 }
 
 iframe {
     width: 100%;
     height: 100%;
     border: none;
+    background: #fff;
 }
 
 /* INPUT + BUTTON */
 input {
-    width: 95%;
-    padding: 8px;
+    width: 100%;
+    padding: 10px 12px;
     margin-bottom: 10px;
-    border-radius: 6px;
-    border: none;
+    border-radius: var(--radius-sm);
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    background: var(--input-bg);
+    color: var(--text);
+    font-size: 13px;
+    outline: none;
+    transition: border-color 0.15s ease, box-shadow 0.15s ease;
+}
+
+input::placeholder {
+    color: var(--text-muted);
+}
+
+input:hover {
+    border-color: rgba(255, 255, 255, 0.18);
+}
+
+input:focus {
+    border-color: rgba(16, 163, 127, 0.55);
+    box-shadow: 0 0 0 3px rgba(16, 163, 127, 0.15);
 }
 
 #sort-btn {
     width: 100%;
-    padding: 8px;
-    margin-bottom: 10px;
-    border: none;
-    border-radius: 8px;
-    background: #3b82f6;
-    color: white;
+    padding: 10px 12px;
+    margin-bottom: 12px;
+    border-radius: var(--radius-sm);
+    border: 1px solid rgba(255, 255, 255, 0.14);
+    background: var(--surface);
+    color: var(--text);
+    font-size: 13px;
+    font-weight: 500;
     cursor: pointer;
+    transition: background 0.15s ease, border-color 0.15s ease;
 }
 
 #sort-btn:hover {
-    background: #2563eb;
+    background: var(--surface-hover);
+    border-color: rgba(255, 255, 255, 0.2);
+}
+
+#sort-btn:focus-visible {
+    outline: 2px solid var(--accent);
+    outline-offset: 2px;
 }
